@@ -225,6 +225,37 @@ def update_post(post_id):
 
     return jsonify(post), 200
 
+@app.route('/api/posts/search', methods=['GET'])
+def search_posts():
+    """
+    Search posts by title or content.
+    Supports: ?title=... and/or ?content=...
+    Returns posts where title OR content matches the search terms.
+    """
+    title_query = request.args.get('title', '').strip()
+    content_query = request.args.get('content', '').strip()
+
+    if not title_query and not content_query:
+        return jsonify(POSTS)
+
+    filtered_posts = []
+    for post in POSTS:
+        title_match = title_query and title_query.lower() in post['title'].lower()
+        content_match = content_query and content_query.lower() in post['content'].lower()
+        
+        
+        include_post = False
+        if title_query and content_query
+            include_post = title_match or content_match
+        elif title_query:
+            include_post = title_match
+        elif content_query:
+            include_post = content_match
+            
+        if include_post:
+            filtered_posts.append(post)
+
+    return jsonify(filtered_posts)
 
 if __name__ == '__main__':
     print(f"Server starting on http://127.0.0.1:5002")

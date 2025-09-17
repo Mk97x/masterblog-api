@@ -29,24 +29,25 @@ function loadPosts() {
 
     localStorage.setItem('apiBaseUrl', baseUrl);
 
-    let url = `${baseUrl}/posts`;
-
-    const params = new URLSearchParams();
-
-
-    const sortField = sortFieldSelect?.value;
-    const sortDirection = sortDirectionSelect?.value;
-    if (sortField) params.append('sort', sortField);
-    if (sortDirection) params.append('direction', sortDirection);
-
-
+    let url;
     const query = searchInput?.value.trim();
-    if (query) params.append('q', query);
-
-    if (params.toString()) {
-        url += '?' + params.toString();
+    
+    // Wenn Suchbegriff vorhanden, verwende den neuen Search Endpoint
+    if (query) {
+        // Suche in beiden Feldern (Titel UND Content) - passt zu deiner Backend-Logik
+        url = `${baseUrl}/posts/search?title=${encodeURIComponent(query)}&content=${encodeURIComponent(query)}`;
+    } else {
+        // Normale Posts-Anzeige mit Sortierung
+        let base_url = `${baseUrl}/posts`;
+        const params = new URLSearchParams();
+        
+        const sortField = sortFieldSelect?.value;
+        const sortDirection = sortDirectionSelect?.value;
+        if (sortField) params.append('sort', sortField);
+        if (sortDirection) params.append('direction', sortDirection);
+        
+        url = params.toString() ? `${base_url}?${params.toString()}` : base_url;
     }
-
 
     postContainer.innerHTML = '<p>Loading posts...</p>';
 
@@ -65,7 +66,6 @@ function loadPosts() {
                 postContainer.innerHTML = '<p>No posts found.</p>';
                 return;
             }
-
 
             postContainer.innerHTML = posts.map(post => `
                 <div class="post">
