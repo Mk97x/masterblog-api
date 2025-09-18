@@ -245,7 +245,7 @@ def search_posts():
         
         
         include_post = False
-        if title_query and content_query
+        if title_query and content_query:
             include_post = title_match or content_match
         elif title_query:
             include_post = title_match
