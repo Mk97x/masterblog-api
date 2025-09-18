@@ -7,7 +7,8 @@ app = Flask(__name__)
 CORS(app) 
 
 
-JSON_FILE = os.path.join(os.path.dirname(__file__), 'blog_posts.json')
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+JSON_FILE = os.path.join(SCRIPT_DIR, 'blog_posts.json')
 
 
 def load_posts():
